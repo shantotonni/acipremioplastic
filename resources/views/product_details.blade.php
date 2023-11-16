@@ -324,6 +324,10 @@
                                     <p style="font-weight: bold;background: #32b792;color: white;padding: 5px;font-size: 16px">
                                         * Delivery Charge (100 taka to 200 taka) depends on your location.
                                     </p>
+                                    <p style="font-weight: bold;background: red;color: white;padding: 5px;font-size: 12px">
+                                        *Kindly note that in the event of a non-defective product return due to a change of mind after delivery,
+                                        double delivery charges will be applied for both the initial delivery and the return.
+                                    </p>
 
 {{--                                    <div class="product-social-buttons">--}}
 {{--                                        <label class="product-social-label">Share:</label>--}}
