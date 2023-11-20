@@ -99,10 +99,10 @@
                             <h4>EVENTS BEYOND OUR CONTROL</h4>
                             <p>We will not be held responsible for any delay or failure to comply with our obligations under these conditions if the delay or failure arises from any because which is beyond our reasonable control. This condition does not affect your statutory rights.</p>
                         </div>
-                        <div class="section">
-                            <h4>REPLACEMENT</h4>
-                            <p>For the valid reason (factory damage, production fault) we might change ordered product. In this case if customer notify us via mail or call center, we will solve it after check back. </p>
-                        </div>
+{{--                        <div class="section">--}}
+{{--                            <h4>REPLACEMENT</h4>--}}
+{{--                            <p>For the valid reason (factory damage, production fault) we might change ordered product. In this case if customer notify us via mail or call center, we will solve it after check back. </p>--}}
+{{--                        </div>--}}
                         <div class="section">
                             <h4>CONDITIONS OF SALE (BETWEEN SELLERS AND CUSTOMERS)</h4>
                             <p>Please read these conditions carefully before placing an order for any products with the Sellers (“We” or “Our” or “Us”, wherever applicable) on the Site. These conditions signify your agreement to be bound by these conditions.</p>

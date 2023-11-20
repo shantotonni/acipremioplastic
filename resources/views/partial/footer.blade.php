@@ -25,7 +25,7 @@
                     <li><a href="{{ route('how.to.buy') }}">How to Buy</a></li>
                     <li><a href="{{ route('terms.condition') }}">Terms & Conditions</a></li>
                     <li><a href="{{route('delivery.policy')}}">Delivery Policy</a></li>
-                    <li><a href="{{ route('refund.policy') }}">Refund & Return Policy</a></li>
+                    <li><a href="{{ route('refund.policy') }}">Return & Installation Service Policy</a></li>
                 </ul>
             </div>
             <div class="footer-block">
