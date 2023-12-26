@@ -52,8 +52,8 @@
                                     <form action="{{ route('price.wise.filter') }}" method="get">
                                         {{ csrf_field() }}
                                         <div style="display: flex;margin: 0 auto">
-                                            <input type="number" style="width: 35%;height: 25px" placeholder="Min" name="minimum_price"> -
-                                            <input type="number" style="width: 35%;height: 25px" placeholder="Max" name="maximum_price">
+                                            <input type="number" style="width: 35%;height: 25px" value="{{ isset($min) ? $min : '0' }}" placeholder="Min" name="minimum_price" required> -
+                                            <input type="number" style="width: 35%;height: 25px" value="{{ isset($max) ? $max : '0' }}" placeholder="Max" name="maximum_price" required>
                                             <input type="hidden" value="{{ $category->CategorySlug }}" name="categorySlug">
                                             <button type="submit" style="width: 20%;;height: 25px;background: #CC1B7B;color: white">Filter</button>
                                         </div>
@@ -61,9 +61,9 @@
                                 </div>
                             </div>
                             <div class="item-grid" style="width: 85%;margin: 0 auto">
-                                @if(isset($category) && !empty($category))
-                                    @if(isset($category->products) && !empty($category->products))
-                                        @foreach($category->products as $product)
+                                @if(isset($products) && !empty($products))
+                                    @if(isset($products) && !empty($products))
+                                        @foreach($products as $product)
                                         <div class="item-box">
                                             <div class="product-item">
                                                 <div class="picture">

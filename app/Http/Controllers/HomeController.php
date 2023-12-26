@@ -25,6 +25,10 @@ class HomeController extends Controller
     public function category($slug){
         $project_id = config('app.project_id');
         $category = Category::where('CategorySlug',$slug)->where('CategoryStatus','Y')->where('ProjectID',$project_id)->with('subcategory','products')->first();
+//        $categories = Category::with(['subcategory'])->where('CategoryStatus','Y')
+//            ->orderBy('Order', 'asc')
+//            ->where('ProjectID',$project_id)->get();
+
         if (isset($category) && !empty($category)){
             if (count($category->subcategory) > 0){
                 return view('sub_category',compact('category'));
@@ -35,14 +39,26 @@ class HomeController extends Controller
             $sub_category = SubCategory::where('SubcategorySlug',$slug)->where('ProjectID',$project_id)->where('SubCategoryStatus','Y')->with('products')->first();
             return view('category_product',compact('sub_category'));
         }
+    }
 
+    public function priceWiseFilter(Request $request){
+        $min = $request->minimum_price;
+        $max = $request->maximum_price;
+        $project_id = config('app.project_id');
+        $category = Category::where('CategorySlug',$request->categorySlug)->where('CategoryStatus','Y')->where('ProjectID',$project_id)->with('subcategory','products')->first();
+        $products = Product::query()->where('CategoryId',$category->CategoryId)
+            ->where('ProductStatus','Y')
+            ->where('ItemFinalPrice','>=',$request->minimum_price)
+            ->where('ItemFinalPrice','<=',$request->maximum_price)
+            ->orderBy('ItemFinalPrice', 'desc')
+            ->get();
+        return view('filter_product',compact('products','category','min','max'));
     }
 
     public function categoryProduct($slug){
         $project_id = config('app.project_id');
         $category = Category::where('CategorySlug',$slug)->where('ProjectID',$project_id)->where('CategoryStatus','Y')->with('products')->first();
         return view('category_product',compact('category'));
-
     }
 
     public function productDetails($slug){
@@ -56,7 +72,6 @@ class HomeController extends Controller
             Toastr::error('Something went wrong' ,'Success');
             return redirect()->back();
         }
-
     }
 
     public function search(Request $request){

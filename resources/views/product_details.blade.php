@@ -617,8 +617,6 @@
         </div>
     </div>
 
-    <!--    main content end-->
-
 @endsection
 
 @push('js')

@@ -17,6 +17,7 @@ Route::get('/category-product/{slug}', 'HomeController@categoryProduct')->name('
 Route::get('/product-details/{slug}', 'HomeController@productDetails')->name('product.details');
 Route::get('/get/offers', 'HomeController@getOffers')->name('get.offers');
 Route::post('/claim/offers', 'HomeController@claimOffers')->name('offer.claim');
+Route::get('/prise-wise-filter', 'HomeController@priceWiseFilter')->name('price.wise.filter');
 
 //pages controller
 Route::get('/about-us', 'PagesController@aboutUs')->name('about.us');
