@@ -18,17 +18,13 @@ class HomeController extends Controller
     public function index()
     {
         $project_id = config('app.project_id');
-        $sliders = Slider::select('BannerID','BannerImageFile','Url')->where('Active','Y')->where('ProjectID',$project_id)->get();
+        $sliders = Slider::select('BannerID','BannerImageFile','Url')->where('Active','Y')->where('ProjectID',$project_id)->orderBy('EditedDate','desc')->get();
         return view('home',compact('sliders'));
     }
 
     public function category($slug){
         $project_id = config('app.project_id');
         $category = Category::where('CategorySlug',$slug)->where('CategoryStatus','Y')->where('ProjectID',$project_id)->with('subcategory','products')->first();
-//        $categories = Category::with(['subcategory'])->where('CategoryStatus','Y')
-//            ->orderBy('Order', 'asc')
-//            ->where('ProjectID',$project_id)->get();
-
         if (isset($category) && !empty($category)){
             if (count($category->subcategory) > 0){
                 return view('sub_category',compact('category'));
@@ -37,7 +33,8 @@ class HomeController extends Controller
             }
         }else{
             $sub_category = SubCategory::where('SubcategorySlug',$slug)->where('ProjectID',$project_id)->where('SubCategoryStatus','Y')->with('products')->first();
-            return view('category_product',compact('sub_category'));
+            $sub_categories = SubCategory::query()->where('ProjectID',$project_id)->where('SubCategoryStatus','Y')->get();
+            return view('category_product',compact('sub_category','sub_categories'));
         }
     }
 
@@ -45,7 +42,16 @@ class HomeController extends Controller
         $min = $request->minimum_price;
         $max = $request->maximum_price;
         $project_id = config('app.project_id');
-        $category = Category::where('CategorySlug',$request->categorySlug)->where('CategoryStatus','Y')->where('ProjectID',$project_id)->with('subcategory','products')->first();
+        if ($request->categorySlug){
+            $categorySlug = $request->categorySlug;
+            $category = Category::where('CategorySlug',$categorySlug)->where('CategoryStatus','Y')->where('ProjectID',$project_id)->with('subcategory','products')->first();
+        }
+        if ($request->subCategorySlug){
+            $subCategorySlug = $request->subCategorySlug;
+            $sub_category = SubCategory::where('subCategorySlug',$subCategorySlug)->where('SubCategoryStatus','Y')->where('ProjectID',$project_id)
+                ->with('products')->first();
+        }
+
         $products = Product::query()->where('CategoryId',$category->CategoryId)
             ->where('ProductStatus','Y')
             ->where('ItemFinalPrice','>=',$request->minimum_price)
@@ -105,7 +111,6 @@ class HomeController extends Controller
 	                        </a>
 	                    ";
                      }
-//echo $data;
         return response()->json($data);
     }
 
@@ -128,7 +133,6 @@ class HomeController extends Controller
 
     public function getOffers(){
         $colors = ['#eae56f','#89f26e','#7de6ef','#4fa978','#4fa978'];
-
         $project_id = config('app.project_id');
         $coupons = Coupon::where('ProjectId',$project_id)->where('Status','active')->orderBy('CreatedAt','desc')->get();
         $pages_array = [];
@@ -140,7 +144,6 @@ class HomeController extends Controller
                 'couponCode' => $coupon->CouponCode
             ];
         }
-
         return view('get_offers',compact('pages_array'));
     }
 
@@ -174,7 +177,6 @@ class HomeController extends Controller
             Toastr::error('Something went wrong' ,'Success');
             return redirect()->back();
         }
-
     }
 
 }

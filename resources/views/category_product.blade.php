@@ -32,20 +32,23 @@
                                 <h3 style="text-align: center;background: #cc1b7b;color: white">Category Filter</h3>
                                 <div class="listbox">
                                     <ul class="list" style="padding: 10px;background: whitesmoke">
-                                        @foreach($categories as $cat)
-                                            @php
-                                                $color = '';
-                                                if($cat->CategorySlug == $category->CategorySlug){
-                                                  $color = "#f3e6e6";
-                                                }
-                                            @endphp
-                                        <li class="active last" style="background: <?php echo $color;?>">
-                                            <a href="{{ route('category',$cat->CategorySlug) }}" style="cursor: pointer">{{ $cat->Category }}</a>
-                                        </li>
-                                        @endforeach
+                                        @if(isset($category) && !empty($category))
+                                            @foreach($categories as $cat)
+                                                @php
+                                                    $color = '';
+                                                    if($cat->CategorySlug == $category->CategorySlug){
+                                                      $color = "#f3e6e6";
+                                                    }
+                                                @endphp
+                                            <li class="active last" style="background: <?php echo $color;?>">
+                                                <a href="{{ route('category',$cat->CategorySlug) }}" style="cursor: pointer">{{ $cat->Category }}</a>
+                                            </li>
+                                            @endforeach
+                                        @endif
                                     </ul>
                                 </div>
                                 <br>
+                                @if(isset($category) && !empty($category))
                                 <h3 style="text-align: center;background: #cc1b7b;color: white">Price Filter</h3>
                                 <br>
                                 <div class="listbox">
@@ -59,6 +62,7 @@
                                         </div>
                                     </form>
                                 </div>
+                                @endif
                             </div>
                             <div class="item-grid" style="width: 85%;margin: 0 auto">
                                 @if(isset($category) && !empty($category))
