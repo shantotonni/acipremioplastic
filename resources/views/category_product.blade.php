@@ -5,7 +5,7 @@
 @push('css')
     <style>
         .dropbtn {
-            padding: 8px 2px;
+            padding: 8px 0px;
             border: none;
         }
 
