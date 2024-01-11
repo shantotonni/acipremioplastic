@@ -73,7 +73,6 @@ class HomeController extends Controller
     }
 
     public function productDetails($slug){
-        echo $slug;
         $project_id = config('app.project_id');
         $product = Product::where('ProductSlug',$slug)->where('ProjectID',$project_id)->with('productImage','review','average','category')->where('ProductStatus','Y')->first();
 
