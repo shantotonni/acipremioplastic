@@ -5,17 +5,17 @@
 @push('css')
     <style>
         .dropbtn {
-            padding: 8px 8px;
+            padding: 8px 2px;
             border: none;
         }
 
-        .dropdown-content {
-            display: none;
+        /*.dropdown-content {*/
+        /*    display: none;*/
 
-        }
+        /*}*/
 
         .dropdown-content li {
-            padding: 8px 8px;
+            padding: 2px 6px;
             display: block;
         }
 
@@ -24,7 +24,6 @@
         }
         .dropbtn a:hover {
             background-color: #f3e6e6;
-            padding: 8px 0px;
             display: block;
         }
 
