@@ -222,7 +222,7 @@
                                         <a href="{{ route('category',$category->CategorySlug) }}" class="{{ count($category->subcategory) > 0 ? 'with-subcategories' : '' }}">{{ $category->Category }}</a>
                                         @if(isset($category->subcategory) && !empty($category->subcategory) && count($category->subcategory) > 0)
                                             <div class="plus-button"></div>
-                                            <div class="sublist-wrap">
+                                            <div class="sublist-wrap ">
                                                 <ul class="sublist">
                                                     <li class="back-button">
                                                         <span>Back</span>

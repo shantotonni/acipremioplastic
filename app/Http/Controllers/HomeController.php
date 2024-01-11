@@ -12,6 +12,7 @@ use App\Model\SubCategory;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use MongoDB\Driver\Session;
+use phpDocumentor\Reflection\DocBlock\Description;
 
 class HomeController extends Controller
 {
@@ -25,7 +26,9 @@ class HomeController extends Controller
     public function category($slug){
         $project_id = config('app.project_id');
         $category = Category::where('CategorySlug',$slug)->where('CategoryStatus','Y')->where('ProjectID',$project_id)->with('subcategory','products')->first();
+
         if (isset($category) && !empty($category)){
+
             if (count($category->subcategory) > 0){
                 return view('sub_category',compact('category'));
             }else{
@@ -33,7 +36,9 @@ class HomeController extends Controller
             }
         }else{
             $sub_category = SubCategory::where('SubcategorySlug',$slug)->where('ProjectID',$project_id)->where('SubCategoryStatus','Y')->with('products')->first();
+
             $sub_categories = SubCategory::query()->where('ProjectID',$project_id)->where('SubCategoryStatus','Y')->get();
+
             return view('category_product',compact('sub_category','sub_categories'));
         }
     }
@@ -68,6 +73,7 @@ class HomeController extends Controller
     }
 
     public function productDetails($slug){
+        echo $slug;
         $project_id = config('app.project_id');
         $product = Product::where('ProductSlug',$slug)->where('ProjectID',$project_id)->with('productImage','review','average','category')->where('ProductStatus','Y')->first();
 
