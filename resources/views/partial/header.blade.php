@@ -101,9 +101,7 @@
                                     <a href="{{ route('register') }}" class="ico-register">Register</a>
                                     <a href="{{ route('login') }}" class="ico-login">Log in</a>
                                     @else
-                                        <a class="ico-login" href="{{ route('logout') }}"
-                                           onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                        <a class="ico-login" href="{{ route('logout') }}" onclick="event.preventDefault();  document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
 
