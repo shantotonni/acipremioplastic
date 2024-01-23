@@ -46,8 +46,8 @@ class CheckoutController extends Controller
 
     public function districtWiseThana(Request $request){
         $district = explode('-',$request->district);
-        $thanas = DB::select(DB::raw("SELECT * FROM vUpazilla where DistrictCode='$district[0]'"));
 
+        $thanas = DB::select(DB::raw("SELECT * FROM vUpazilla where DistrictCode='$district[0]'"));
         $string = '';
         $string .= "<option value=''>".'Select Thana'. "</option>";
         foreach($thanas as $value){
@@ -87,8 +87,8 @@ class CheckoutController extends Controller
     }
 
     public function checkoutStore(Request $request){
-
         $total_amount = str_replace(',','',Cart::subtotal());
+
         $total_amount = (int)$total_amount;
         if ($total_amount <= 1000){
             return redirect()->route('checkout.confirm');

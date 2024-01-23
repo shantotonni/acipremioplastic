@@ -113,7 +113,9 @@
             $.ajax({
                 type: "POST",
                 url: "{{ url('district/wise/thana') }}",
-                data: { district : district }
+                data: {
+                    district : district
+                }
             }).done(function(data){
                 console.log(data);
                 $("#Thana").html(data);
