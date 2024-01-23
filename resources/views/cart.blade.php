@@ -224,8 +224,11 @@
                                                         <label>Sub Total:</label>
                                                     </td>
                                                     <td class="cart-total-right">
-{{--                                                        <span class="value-summary total" id="cart_total">{{ Cart::subtotal() }}৳</span>--}}
-                                                        <span class="value-summary total" id="cart_total">{{ str_replace(',','',$mrp_total) - (isset($offer_amount) ? $offer_amount : 0) }}৳</span>
+                                                        @if(!empty($offer_amount))
+                                                            <span class="value-summary total" id="cart_total">{{ str_replace(',','',$mrp_total) - (isset($offer_amount) ? $offer_amount : 0) }}৳</span>
+                                                        @else
+                                                        <span class="value-summary total" id="cart_total">{{ Cart::subtotal() }}৳</span>
+                                                            @endif
                                                     </td>
                                                 </tr>
 
@@ -248,11 +251,11 @@
                                                             <span class="value-summary grand-total"><strong>{{ Cart::total() - (isset($offer_amount) ? $offer_amount : 0) }}৳</strong></span>
                                                         @elseif (!empty(session()->get('coupon_offer')['CouponCode']))
 
-{{--                                                            <span class="value-summary grand-total"><strong>{{str_replace(',','',Cart::total()) - (isset($offer_amount) ? $offer_amount : 0) }}৳</strong></span>--}}
+                                                                <span class="value-summary grand-total"><strong>{{str_replace(',','',Cart::total()) }}৳</strong></span>
+                                                            @else
+                                                                <span class="value-summary grand-total"><strong>{{  Cart::total() }}৳</strong></span>
 
-{{--                                                        @else--}}
-                                                            <span class="value-summary grand-total"><strong>{{  Cart::total() }}৳</strong></span>
-                                                            @endif
+                                                        @endif
                                                     </td>
 {{--                                                    <td class="cart-total-right">--}}
 {{--                                                        @if (!empty(session()->get('spin_offer')['CouponCode']))--}}
