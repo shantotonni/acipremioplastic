@@ -119,7 +119,7 @@
                                                                 ?>
                                                                 @foreach(Cart::content() as $item)
                                                                     <?php
-                                                                    $mrp_total += $item->options->ItemPrice;
+                                                                    $mrp_total += $item->options->ItemPrice * $item->qty;
                                                                     ?>
                                                                     <tr class="cart-item-row">
                                                                         <td class="product-picture">
@@ -132,7 +132,7 @@
                                                                         </td>
                                                                         <td class="unit-price">
                                                                             <label class="td-title">Price:</label>
-                                                                            <span class="product-unit-price">{{ $item->price }}৳</span>
+                                                                            <span class="product-unit-price">{{ $item->options->ItemPrice }}৳</span>
                                                                         </td>
                                                                         <td class="quantity">
                                                                             <div class="product-qty-container">
@@ -163,20 +163,11 @@
                                                                                     <span class="value-summary">{{ $mrp_total }}৳</span>
                                                                                 </td>
                                                                             </tr>
-                                                                            <tr class="order-subtotal">
-                                                                                <td class="cart-total-left">
-                                                                                    <label>Sub Total:</label>
-                                                                                </td>
-                                                                                <td class="cart-total-right">
-                                                                                    <span class="value-summary">{{ Cart::subtotal() }}৳</span>
-                                                                                </td>
-                                                                            </tr>
-
                                                                             @if (!empty(session()->get('spin_offer')['CouponCode']))
-                                                                                <?php
+                                                                                    <?php
                                                                                     $offer = session()->get('spin_offer')['offer'];
                                                                                     $offer_amount = (Cart::subtotal() * $offer) /100;
-                                                                                ?>
+                                                                                    ?>
                                                                                 <input type="hidden" name="DiscountAmount" value="{{ $offer_amount }}">
                                                                                 <tr class="order-subtotal-discount">
                                                                                     <td class="cart-total-left">
@@ -189,10 +180,11 @@
                                                                             @endif
 
                                                                             @if (!empty(session()->get('coupon_offer')['CouponCode']))
-                                                                                <?php
-                                                                                $offer = session()->get('coupon_offer')['offer'];
-                                                                                $offer_amount = (str_replace(',','',Cart::subtotal()) * $offer) /100;
-                                                                                ?>
+                                                                                    <?php
+                                                                                    $offer = session()->get('coupon_offer')['offer'];
+                                                                                    $offer_amount = (str_replace(',','',$mrp_total) * $offer) /100;
+//                                                                                    $offer_amount = (str_replace(',','',Cart::subtotal()) * $offer) /100;
+                                                                                    ?>
                                                                                 <input type="hidden" name="DiscountAmount" value="{{ $offer_amount }}">
                                                                                 <tr class="order-subtotal-discount">
                                                                                     <td class="cart-total-left">
@@ -203,6 +195,22 @@
                                                                                     </td>
                                                                                 </tr>
                                                                             @endif
+                                                                            <tr class="order-subtotal">
+                                                                                <td class="cart-total-left">
+                                                                                    <label>Sub Total:</label>
+                                                                                </td>
+                                                                                <td class="cart-total-right">
+                                                                                    @if(!empty($offer_amount))
+                                                                                        <span class="value-summary total" id="cart_total">{{ str_replace(',','',$mrp_total) - (isset($offer_amount) ? $offer_amount : 0) }}৳</span>
+                                                                                    @else
+                                                                                        <span class="value-summary total" id="cart_total">{{ Cart::subtotal() }}৳</span>
+                                                                                    @endif
+{{--                                                                                    <span class="value-summary">{{ str_replace(',','',$mrp_total) - (isset($offer_amount) ? $offer_amount : 0) }}৳</span>--}}
+{{--                                                                                    <span class="value-summary">{{ Cart::subtotal() }}৳</span>--}}
+                                                                                </td>
+                                                                            </tr>
+
+
 
                                                                         <tr class="shipping-cost">
                                                                             <td class="cart-total-left">
@@ -221,11 +229,14 @@
                                                                                 @if (!empty(session()->get('spin_offer')['CouponCode']))
                                                                                     <span class="value-summary"><strong>{{ Cart::total() - (isset($offer_amount) ? $offer_amount : 0) }}৳</strong></span>
                                                                                 @elseif (!empty(session()->get('coupon_offer')['CouponCode']))
-                                                                                    <span class="value-summary"><strong>{{ str_replace(',','',Cart::total()) - (isset($offer_amount) ? $offer_amount : 0) }}৳</strong></span>
+                                                                                    @if(!empty($offer_amount))
+                                                                                        <span class="value-summary total" id="cart_total">{{ str_replace(',','',$mrp_total) - (isset($offer_amount) ? $offer_amount : 0) }}৳</span>
+                                                                                    @else
+                                                                                        <span class="value-summary grand-total"><strong>{{str_replace(',','',Cart::total()) }}৳</strong></span>
+                                                                                    @endif
                                                                                 @else
-                                                                                    <span class="value-summary"><strong>{{ Cart::total() }}৳</strong></span>
+                                                                                    <span class="value-summary grand-total"><strong>{{  Cart::total() }}৳</strong></span>
                                                                                 @endif
-
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>

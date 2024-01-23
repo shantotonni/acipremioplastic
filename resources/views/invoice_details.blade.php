@@ -109,7 +109,7 @@
                                                 </td>
                                                 <td class="unit-price">
                                                     <label class="td-title">Price: </label>
-                                                    <span class="product-unit-price">{{ $details->ItemFinalPrice }}৳</span>
+                                                    <span class="product-unit-price">{{ $details->ItemPrice }}৳</span>
                                                 </td>
                                                 <td class="quantity">
                                                     <label class="td-title">Qty: </label>

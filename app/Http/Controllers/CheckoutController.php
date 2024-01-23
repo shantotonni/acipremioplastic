@@ -46,8 +46,8 @@ class CheckoutController extends Controller
 
     public function districtWiseThana(Request $request){
         $district = explode('-',$request->district);
-        $thanas = DB::select(DB::raw("SELECT * FROM vUpazilla where DistrictCode='$district[0]'"));
 
+        $thanas = DB::select(DB::raw("SELECT * FROM vUpazilla where DistrictCode='$district[0]'"));
         $string = '';
         $string .= "<option value=''>".'Select Thana'. "</option>";
         foreach($thanas as $value){
@@ -87,7 +87,6 @@ class CheckoutController extends Controller
     }
 
     public function checkoutStore(Request $request){
-
         $total_amount = str_replace(',','',Cart::subtotal());
         $total_amount = (int)$total_amount;
         if ($total_amount <= 1000){
@@ -97,9 +96,10 @@ class CheckoutController extends Controller
         $project_id = config('app.project_id');
         $ip = $_SERVER['REMOTE_ADDR'];
 
-        $coupon_offer = session()->get('coupon_offer')['CouponCode'];
+        $coupon_offer = session()->get('coupon_offer');
 
         if ($coupon_offer){
+            $coupon_offer = session()->get('coupon_offer')['CouponCode'];
             $coupon = Coupon::where('CouponCode', $coupon_offer)->where('ProjectID',$project_id)->first();
             $coupon->Sold = $coupon->Sold+1;
             $coupon->save();
@@ -122,6 +122,22 @@ class CheckoutController extends Controller
             $CouponID = $coupon->CouponID;
         }
 
+        $mrp_total = 0;
+        foreach(Cart::content() as $item){
+            $mrp_total += $item->options->ItemPrice * $item->qty;
+        }
+
+        $coupon_offer = session()->get('coupon_offer');
+        if (!empty($coupon_offer)){
+            $offer = session()->get('coupon_offer')['offer'];
+            $offer_amount = (str_replace(',','',$mrp_total) * $offer) /100;
+            $subtotal = $mrp_total - $offer_amount;
+            $total_price = $mrp_total - $offer_amount;
+        }else{
+            $subtotal = Cart::subtotal();
+            $total_price = Cart::total();
+        }
+
         $invoice = new Invoice();
         $invoice->ProjectID = $project_id;
         $invoice->CouponID = isset($coupon) ? $coupon->CouponID : '';
@@ -141,8 +157,10 @@ class CheckoutController extends Controller
         $invoice->DeliveryAddress = $request->DeliveryAddress;
 
         $invoice->DiscountAmount = isset($request->DiscountAmount) ? $request->DiscountAmount : 0;
-        $invoice->TotalAmount = str_replace(',','',Cart::total());
-        $invoice->GrandTotal = str_replace(',','',Cart::total()) - (isset($request->DiscountAmount) ? $request->DiscountAmount : 0);
+//        $invoice->TotalAmount = str_replace(',','',Cart::total());
+//        $invoice->GrandTotal = str_replace(',','',Cart::total()) - (isset($request->DiscountAmount) ? $request->DiscountAmount : 0);
+        $invoice->TotalAmount = str_replace(',','',$subtotal);
+        $invoice->GrandTotal = str_replace(',','',$total_price);
         $invoice->DiscountID = 1;
         $invoice->DeliveryCharge = 0;
         $invoice->Remark = 'Remark';
@@ -155,16 +173,29 @@ class CheckoutController extends Controller
 
         if ($invoice->save()){
             foreach(Cart::content() as $item){
+                $coupon_offer = session()->get('coupon_offer');
+                if (!empty($coupon_offer)){
+                    $amount = $item->options->ItemPrice;
+                    $offer = session()->get('coupon_offer')['offer'];
+                    $offer_amount = (str_replace(',','',$amount) * $offer) /100;
+                    $item_price = $item->options->ItemPrice;
+                    $item_final_price = $item->options->ItemPrice - $offer_amount;
+                }else{
+                    $item_price = $item->price;
+                    $item_final_price = $item->price;
+                }
+
                 $invoice_details =new InvoiceDetail();
                 $invoice_details->InvoiceNo = $invoice->InvoiceNo;
                 $invoice_details->ProductCode = $item->id;
                 $invoice_details->ProductName = $item->name;
                 $invoice_details->Quantity = $item->qty;
                 $invoice_details->DeliveryQuantity = $item->qty;
-                $invoice_details->ItemPrice = $item->price;
+                $invoice_details->ItemPrice = $item_price;
+
                 $invoice_details->VAT = 0;
-                $invoice_details->Discount = isset($request->DiscountAmount) ? $request->DiscountAmount : 0;
-                $invoice_details->ItemFinalPrice = $item->price;
+                $invoice_details->Discount = $offer_amount;
+                $invoice_details->ItemFinalPrice = $item_final_price;
                 $invoice_details->save();
             }
 
