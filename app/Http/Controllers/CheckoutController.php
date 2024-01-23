@@ -88,7 +88,6 @@ class CheckoutController extends Controller
 
     public function checkoutStore(Request $request){
         $total_amount = str_replace(',','',Cart::subtotal());
-
         $total_amount = (int)$total_amount;
         if ($total_amount <= 1000){
             return redirect()->route('checkout.confirm');
@@ -102,7 +101,7 @@ class CheckoutController extends Controller
         if ($coupon_offer){
             $coupon = Coupon::where('CouponCode', $coupon_offer)->where('ProjectID',$project_id)->first();
             $coupon->Sold = $coupon->Sold+1;
-            $coupon->save();
+//            $coupon->save();
 
             $coupon_user = new CouponLog();
             $coupon_user->UserId = Auth::user()->CustomerID;
@@ -117,7 +116,7 @@ class CheckoutController extends Controller
             $coupon_user->UpdatedAt = Carbon::now();
             $coupon_user->ValidUpto = Carbon::now();
             $coupon_user->Used = 1;
-            $coupon_user->save();
+//            $coupon_user->save();
 
             $CouponID = $coupon->CouponID;
         }
@@ -141,8 +140,10 @@ class CheckoutController extends Controller
         $invoice->DeliveryAddress = $request->DeliveryAddress;
 
         $invoice->DiscountAmount = isset($request->DiscountAmount) ? $request->DiscountAmount : 0;
+//        $invoice->TotalAmount = str_replace(',','',Cart::total());
+//        $invoice->GrandTotal = str_replace(',','',Cart::total()) - (isset($request->DiscountAmount) ? $request->DiscountAmount : 0);
         $invoice->TotalAmount = str_replace(',','',Cart::total());
-        $invoice->GrandTotal = str_replace(',','',Cart::total()) - (isset($request->DiscountAmount) ? $request->DiscountAmount : 0);
+        $invoice->GrandTotal = str_replace(',','',Cart::total());
         $invoice->DiscountID = 1;
         $invoice->DeliveryCharge = 0;
         $invoice->Remark = 'Remark';
@@ -162,6 +163,7 @@ class CheckoutController extends Controller
                 $invoice_details->Quantity = $item->qty;
                 $invoice_details->DeliveryQuantity = $item->qty;
                 $invoice_details->ItemPrice = $item->price;
+
                 $invoice_details->VAT = 0;
                 $invoice_details->Discount = isset($request->DiscountAmount) ? $request->DiscountAmount : 0;
                 $invoice_details->ItemFinalPrice = $item->price;
