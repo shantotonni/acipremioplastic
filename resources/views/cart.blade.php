@@ -215,6 +215,7 @@
 
                                                 @if (!empty(session()->get('coupon_offer')['CouponCode']))
                                                     <?php
+                                                        //dd(Cart::content());
                                                     $offer = session()->get('coupon_offer')['offer'];
                                                     $offer_amount = (str_replace(',','',Cart::subtotal()) * $offer) /100;
                                                     ?>
