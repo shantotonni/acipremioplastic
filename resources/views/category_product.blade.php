@@ -51,7 +51,7 @@
                     </div>
                     <div class="page-body">
                         <div class="product-grid" style="display: flex">
-                            <div style="width: 13%">
+                            <div style="width: 25%">
                                 <h3 style="text-align: center;background: #cc1b7b;color: white">Category Filter</h3>
                                 <div class="listbox dropdown ">
                                     <ul class="list" style="padding: 10px;background: whitesmoke">
@@ -109,7 +109,7 @@
                                                 <input type="number" style="width: 35%;height: 25px" placeholder="Min" name="minimum_price"> -
                                                 <input type="number" style="width: 35%;height: 25px" placeholder="Max" name="maximum_price">
                                                 <input type="hidden" value="{{ $category->CategorySlug }}" name="categorySlug">
-                                                <button type="submit" style="width: 20%;;height: 25px;background: #CC1B7B;color: white">Filter</button>
+                                                <button type="submit" style="width: 35%;;height: 25px;background: #CC1B7B;color: white">Filter</button>
                                             </div>
                                         </form>
                                     </div>
