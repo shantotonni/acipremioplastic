@@ -87,125 +87,131 @@ class CheckoutController extends Controller
     }
 
     public function checkoutStore(Request $request){
-        $total_amount = str_replace(',','',Cart::subtotal());
-        $total_amount = (int)$total_amount;
-        if ($total_amount <= 1000){
-            return redirect()->route('checkout.confirm');
-        }
+        try {
+            DB::beginTransaction();
+            $total_amount = str_replace(',','',Cart::subtotal());
+            $total_amount = (int)$total_amount;
+            if ($total_amount <= 1000){
+                return redirect()->route('checkout.confirm');
+            }
 
-        $project_id = config('app.project_id');
-        $ip = $_SERVER['REMOTE_ADDR'];
+            $project_id = config('app.project_id');
+            $ip = $_SERVER['REMOTE_ADDR'];
 
-        $coupon_offer = session()->get('coupon_offer');
+            $coupon_offer = session()->get('coupon_offer');
 
-        if ($coupon_offer){
-            $coupon_offer = session()->get('coupon_offer')['CouponCode'];
-            $coupon = Coupon::where('CouponCode', $coupon_offer)->where('ProjectID',$project_id)->first();
-            $coupon->Sold = $coupon->Sold+1;
-            $coupon->save();
+            if ($coupon_offer){
+                $coupon_offer = session()->get('coupon_offer')['CouponCode'];
+                $coupon = Coupon::where('CouponCode', $coupon_offer)->where('ProjectID',$project_id)->first();
+                $coupon->Sold = $coupon->Sold+1;
+                $coupon->save();
 
-            $coupon_user = new CouponLog();
-            $coupon_user->UserId = Auth::user()->CustomerID;
-            $coupon_user->ProjectID = $project_id;
-            $coupon_user->CouponID = $coupon->CouponID;
-            $coupon_user->CouponCode = $coupon->CouponCode;
-            $coupon_user->Mobile = Auth::user()->CustomerMobileNo;
-            $coupon_user->CouponName = $coupon->CouponName;
-            $coupon_user->Offer = $coupon->Offer;
-            $coupon_user->OfferType = $coupon->OfferType;
-            $coupon_user->CreatedAt = Carbon::now();
-            $coupon_user->UpdatedAt = Carbon::now();
-            $coupon_user->ValidUpto = Carbon::now();
-            $coupon_user->Used = 1;
-            $coupon_user->save();
+                $coupon_user = new CouponLog();
+                $coupon_user->UserId = Auth::user()->CustomerID;
+                $coupon_user->ProjectID = $project_id;
+                $coupon_user->CouponID = $coupon->CouponID;
+                $coupon_user->CouponCode = $coupon->CouponCode;
+                $coupon_user->Mobile = Auth::user()->CustomerMobileNo;
+                $coupon_user->CouponName = $coupon->CouponName;
+                $coupon_user->Offer = $coupon->Offer;
+                $coupon_user->OfferType = $coupon->OfferType;
+                $coupon_user->CreatedAt = Carbon::now();
+                $coupon_user->UpdatedAt = Carbon::now();
+                $coupon_user->ValidUpto = Carbon::now();
+                $coupon_user->Used = 1;
+                $coupon_user->save();
 
-            $CouponID = $coupon->CouponID;
-        }
+                $CouponID = $coupon->CouponID;
+            }
 
-        $mrp_total = 0;
-        foreach(Cart::content() as $item){
-            $mrp_total += $item->options->ItemPrice * $item->qty;
-        }
+            $mrp_total = 0;
+            foreach(Cart::content() as $item){
+                $mrp_total += $item->options->ItemPrice * $item->qty;
+            }
 
-        $coupon_offer = session()->get('coupon_offer');
-        if (!empty($coupon_offer)){
-            $offer = session()->get('coupon_offer')['offer'];
-            $offer_amount = (str_replace(',','',$mrp_total) * $offer) /100;
-            $subtotal = $mrp_total - $offer_amount;
-            $total_price = $mrp_total - $offer_amount;
-        }else{
-            $subtotal = Cart::subtotal();
-            $total_price = Cart::total();
-        }
+            $coupon_offer = session()->get('coupon_offer');
+            if (!empty($coupon_offer)){
+                $offer = session()->get('coupon_offer')['offer'];
+                $offer_amount = (str_replace(',','',$mrp_total) * $offer) /100;
+                $subtotal = $mrp_total - $offer_amount;
+                $total_price = $mrp_total - $offer_amount;
+            }else{
+                $subtotal = Cart::subtotal();
+                $total_price = Cart::total();
+            }
 
-        $invoice = new Invoice();
-        $invoice->ProjectID = $project_id;
-        $invoice->CouponID = isset($coupon) ? $coupon->CouponID : '';
-        $invoice->InvoicePeriod = Carbon::now()->format('Ym');
-        $invoice->InvoiceDate = Carbon::now();
-        $invoice->CustomerID = Auth::user()->CustomerID;
-        $invoice->CouponID = isset($CouponID) ? $CouponID : null;
-        $invoice->CustomerName = $request->CustomerName;
-        $invoice->CustomerMobileNo = $request->CustomerMobileNo;
-        $invoice->CustomerEmail = $request->CustomerEmail;
-        $invoice->AddressID = isset($request->AddressID) ? $request->AddressID : '';
-        $invoice->DistrictCode = $request->DistrictCode;
-        $invoice->DistrictName = $request->DistrictName;
-        $invoice->ThanaCode = $request->ThanaCode;
-        $invoice->ThanaName = $request->ThanaName;
+            $invoice = new Invoice();
+            $invoice->ProjectID = $project_id;
+            $invoice->CouponID = isset($coupon) ? $coupon->CouponID : '';
+            $invoice->InvoicePeriod = Carbon::now()->format('Ym');
+            $invoice->InvoiceDate = Carbon::now();
+            $invoice->CustomerID = Auth::user()->CustomerID;
+            $invoice->CouponID = isset($CouponID) ? $CouponID : null;
+            $invoice->CustomerName = $request->CustomerName;
+            $invoice->CustomerMobileNo = $request->CustomerMobileNo;
+            $invoice->CustomerEmail = $request->CustomerEmail;
+            $invoice->AddressID = isset($request->AddressID) ? $request->AddressID : '';
+            $invoice->DistrictCode = $request->DistrictCode;
+            $invoice->DistrictName = $request->DistrictName;
+            $invoice->ThanaCode = $request->ThanaCode;
+            $invoice->ThanaName = $request->ThanaName;
 
-        $invoice->DeliveryAddress = $request->DeliveryAddress;
+            $invoice->DeliveryAddress = $request->DeliveryAddress;
 
-        $invoice->DiscountAmount = isset($request->DiscountAmount) ? $request->DiscountAmount : 0;
+            $invoice->DiscountAmount = isset($request->DiscountAmount) ? $request->DiscountAmount : 0;
 //        $invoice->TotalAmount = str_replace(',','',Cart::total());
 //        $invoice->GrandTotal = str_replace(',','',Cart::total()) - (isset($request->DiscountAmount) ? $request->DiscountAmount : 0);
-        $invoice->TotalAmount = str_replace(',','',$subtotal);
-        $invoice->GrandTotal = str_replace(',','',$total_price);
-        $invoice->DiscountID = 1;
-        $invoice->DeliveryCharge = 0;
-        $invoice->Remark = 'Remark';
-        $invoice->SupplierID = 1;
-        $invoice->PaymentMethodId = 1;
-        $invoice->IpAddress = $ip;
-        $invoice->InvStatusID = 1;
-        $invoice->ShipDate = '';
-        $invoice->ShippersID = '';
+            $invoice->TotalAmount = str_replace(',','',$subtotal);
+            $invoice->GrandTotal = str_replace(',','',$total_price);
+            $invoice->DiscountID = 1;
+            $invoice->DeliveryCharge = 0;
+            $invoice->Remark = 'Remark';
+            $invoice->SupplierID = 1;
+            $invoice->PaymentMethodId = 1;
+            $invoice->IpAddress = $ip;
+            $invoice->InvStatusID = 1;
+            $invoice->ShipDate = '';
+            $invoice->ShippersID = '';
 
-        if ($invoice->save()){
-            foreach(Cart::content() as $item){
-                $coupon_offer = session()->get('coupon_offer');
-                if (!empty($coupon_offer)){
-                    $amount = $item->options->ItemPrice;
-                    $offer = session()->get('coupon_offer')['offer'];
-                    $offer_amount = (str_replace(',','',$amount) * $offer) /100;
-                    $item_price = $item->options->ItemPrice;
-                    $item_final_price = $item->options->ItemPrice - $offer_amount;
-                }else{
-                    $item_price = $item->price;
-                    $item_final_price = $item->price;
+            if ($invoice->save()){
+                foreach(Cart::content() as $item){
+                    $coupon_offer = session()->get('coupon_offer');
+                    if (!empty($coupon_offer)){
+                        $amount = $item->options->ItemPrice;
+                        $offer = session()->get('coupon_offer')['offer'];
+                        $offer_amount = (str_replace(',','',$amount) * $offer) /100;
+                        $item_price = $item->options->ItemPrice;
+                        $item_final_price = $item->options->ItemPrice - $offer_amount;
+                    }else{
+                        $item_price = $item->price;
+                        $item_final_price = $item->price;
+                        $offer_amount = 0;
+                    }
+
+                    $invoice_details =new InvoiceDetail();
+                    $invoice_details->InvoiceNo = $invoice->InvoiceNo;
+                    $invoice_details->ProductCode = $item->id;
+                    $invoice_details->ProductName = $item->name;
+                    $invoice_details->Quantity = $item->qty;
+                    $invoice_details->DeliveryQuantity = $item->qty;
+                    $invoice_details->ItemPrice = $item_price;
+
+                    $invoice_details->VAT = 0;
+                    $invoice_details->Discount = $offer_amount;
+                    $invoice_details->ItemFinalPrice = $item_final_price;
+                    $invoice_details->save();
                 }
 
-                $invoice_details =new InvoiceDetail();
-                $invoice_details->InvoiceNo = $invoice->InvoiceNo;
-                $invoice_details->ProductCode = $item->id;
-                $invoice_details->ProductName = $item->name;
-                $invoice_details->Quantity = $item->qty;
-                $invoice_details->DeliveryQuantity = $item->qty;
-                $invoice_details->ItemPrice = $item_price;
-
-                $invoice_details->VAT = 0;
-                $invoice_details->Discount = $offer_amount;
-                $invoice_details->ItemFinalPrice = $item_final_price;
-                $invoice_details->save();
+                if(!empty(session()->get('coupon_offer')['CouponCode'])){
+                    session()->forget('coupon_offer');
+                }
+                DB::commit();
+                Cart::instance('default')->destroy();
+                Toastr::success('Order Successfully Completed' ,'Success');
+                return redirect()->route('invoice.details',$invoice->InvoiceNo);
             }
-
-            if(!empty(session()->get('coupon_offer')['CouponCode'])){
-                session()->forget('coupon_offer');
-            }
-
-            Cart::instance('default')->destroy();
-            Toastr::success('Order Successfully Completed' ,'Success');
-            return redirect()->route('invoice.details',$invoice->InvoiceNo);
+        }catch (\Exception $exception){
+            return $exception->getMessage();
         }
     }
 
