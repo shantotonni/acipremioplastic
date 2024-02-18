@@ -141,16 +141,12 @@
                                         * Delivery Charge (100 taka to 200 taka) depends on your location.
                                     </p>
                                 </div>
-                                @else
-                                    <p style="text-align: center">Your Shopping Cart is empty!</p>
-                                @endif
-
                                 <div class="cart-footer">
                                     <form action="{{ route('apply.coupon') }}" method="post">
-                                    <div class="cart-collaterals">
-                                        <div class="deals">
-                                            <div class="title">Discount codes and Vouchers</div>
-                                            @if(\Illuminate\Support\Facades\Auth::check())
+                                        <div class="cart-collaterals">
+                                            <div class="deals">
+                                                <div class="title">Discount codes and Vouchers</div>
+                                                @if(\Illuminate\Support\Facades\Auth::check())
                                                     {{ csrf_field() }}
                                                     <div class="list">
                                                         <div class="coupon-box">
@@ -168,13 +164,13 @@
                                                         </div>
                                                     </div>
 
-                                            @else
-                                                <div class="list">
-                                                    If You want to apply coupon code Please login!
-                                                </div>
-                                            @endif
+                                                @else
+                                                    <div class="list">
+                                                        If You want to apply coupon code Please login!
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
                                     </form>
                                     <div class="totals">
                                         <div class="total-info">
@@ -189,11 +185,11 @@
                                                     </td>
                                                 </tr>
                                                 @if (!empty(session()->get('coupon_offer')['CouponCode']))
-                                                    <?php
+                                                        <?php
 
-                                                    $offer = session()->get('coupon_offer')['offer'];
-                                                    $offer_amount = (str_replace(',','',$mrp_total) * $offer) /100;
-                                                    ?>
+                                                        $offer = session()->get('coupon_offer')['offer'];
+                                                        $offer_amount = (str_replace(',','',$mrp_total) * $offer) /100;
+                                                        ?>
 
                                                     <tr class="order-subtotal-discount">
                                                         <td class="cart-total-left">
@@ -256,20 +252,20 @@
                                                                 <span class="value-summary grand-total"><strong>{{str_replace(',','',Cart::total()) }}৳</strong></span>
                                                             @endif
                                                         @else
-                                                              <span class="value-summary grand-total"><strong>{{  Cart::total() }}৳</strong></span>
+                                                            <span class="value-summary grand-total"><strong>{{  Cart::total() }}৳</strong></span>
 
                                                         @endif
                                                     </td>
-{{--                                                    <td class="cart-total-right">--}}
-{{--                                                        @if (!empty(session()->get('spin_offer')['CouponCode']))--}}
-{{--                                                            <span class="value-summary grand-total"><strong>{{ Cart::total() - (isset($offer_amount) ? $offer_amount : 0) }}৳</strong></span>--}}
-{{--                                                        @elseif (!empty(session()->get('coupon_offer')['CouponCode']))--}}
-{{--                                                           --}}
-{{--                                                            <span class="value-summary grand-total"><strong>{{ str_replace(',','',Cart::total()) - (isset($offer_amount) ? $offer_amount : 0) }}৳</strong></span>--}}
-{{--                                                        @else--}}
-{{--                                                            <span class="value-summary grand-total"><strong>{{ Cart::total() }}৳</strong></span>--}}
-{{--                                                            @endif--}}
-{{--                                                    </td>--}}
+                                                    {{--                                                    <td class="cart-total-right">--}}
+                                                    {{--                                                        @if (!empty(session()->get('spin_offer')['CouponCode']))--}}
+                                                    {{--                                                            <span class="value-summary grand-total"><strong>{{ Cart::total() - (isset($offer_amount) ? $offer_amount : 0) }}৳</strong></span>--}}
+                                                    {{--                                                        @elseif (!empty(session()->get('coupon_offer')['CouponCode']))--}}
+                                                    {{--                                                           --}}
+                                                    {{--                                                            <span class="value-summary grand-total"><strong>{{ str_replace(',','',Cart::total()) - (isset($offer_amount) ? $offer_amount : 0) }}৳</strong></span>--}}
+                                                    {{--                                                        @else--}}
+                                                    {{--                                                            <span class="value-summary grand-total"><strong>{{ Cart::total() }}৳</strong></span>--}}
+                                                    {{--                                                            @endif--}}
+                                                    {{--                                                    </td>--}}
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -280,6 +276,11 @@
                                         <div class="addon-buttons"></div>
                                     </div>
                                 </div>
+                                @else
+                                    <p style="text-align: center">Your Shopping Cart is empty!</p>
+                                @endif
+
+
 
                         </div>
                     </div>

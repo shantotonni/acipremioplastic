@@ -15,6 +15,7 @@ Route::get('/prise-wise-filter', 'HomeController@priceWiseFilter')->name('price.
 Route::get('/about-us', 'PagesController@aboutUs')->name('about.us');
 Route::get('/contact-us', 'PagesController@contactUs')->name('contact');
 Route::get('/how-to-buy', 'PagesController@howToBuy')->name('how.to.buy');
+Route::get('/product-catalogue', 'PagesController@catalogue')->name('product.catalogue');
 Route::get('/terms-and-condition', 'PagesController@termsOfCondition')->name('terms.condition');
 Route::get('/delivery-policy', 'PagesController@deliveryPolicy')->name('delivery.policy');
 Route::get('/return-refund-policy', 'PagesController@refundPolicy')->name('refund.policy');
