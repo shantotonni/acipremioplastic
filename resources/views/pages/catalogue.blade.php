@@ -145,7 +145,7 @@
             width: 100%;
             top: 10%;
             z-index: 10;
-            padding: 40% 10%;
+            padding: 40% 14%;
         }
         .box-close{
             top: 17%;
@@ -153,18 +153,42 @@
         }
 
     }
-    @media only screen and (max-width:400px) {
+    @media only screen and (max-width:490px) {
         .content {
             width: 100%;
             top: 7%;
             z-index: 10;
-            padding: 27% 10%;
+            padding: 125px 5px;
         }
         .box-close{
             top: 11%;
             right: 5%;
         }
-
     }
+    @media only screen and (max-width:419px) {
+        .content {
+            width: 100%;
+            top: 7%;
+            z-index: 10;
+            padding: 187px 58px;
+        }
+        .box-close{
+            top: 18%;
+            right: 10%;
+        }
+    }
+    @media only screen and (max-width:375px) {
+        .content {
+            width: 100%;
+            top: 7%;
+            z-index: 10;
+            padding: 22px 5px;
+        }
+        .box-close{
+            top: 2%;
+            right: 0%;
+        }
+    }
+
 </style>
 
