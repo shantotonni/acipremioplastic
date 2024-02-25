@@ -53,7 +53,7 @@
                                                             <img src="{{ asset('uploads/catalogue/kings-Group.jpg') }}" alt="Supernova_Logo"/>
                                                         </div>
                                                         <h2 class="title" style="padding: 10px 15px">
-                                                            <span style="display: block;padding-bottom: 10px"> <b>King Group</b></span>
+                                                            <span style="display: block;padding-bottom: 10px"> <b>Kings Group</b></span>
                                                             Furniture and Household
                                                             <a class="kidsDownload" style="background: white; margin-top: 10px; padding: 10px 10px;"
                                                                href="#popup-box" title="">View</a>
