@@ -39,6 +39,13 @@ class PagesController extends Controller
 
     }
 
+    public function catalogueKings() {
+        return view('pages.kings_group');
+    }
+    public function catalogueCaptain() {
+        return view('pages.captains_group');
+    }
+
     public function deliveryPolicy() {
         return view('pages.delivery_policy');
     }

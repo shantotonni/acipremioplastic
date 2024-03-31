@@ -10,6 +10,9 @@
 
     <?php
     $image_url = config('app.base_image_url');
+    $kings ='kings';
+    $captain ='captain';
+
     ?>
     @include('partial/slider')
     <!--    main content start-->
@@ -24,26 +27,29 @@
                             <div class="sb-home-page-category-slider-kids-edu">
                                 <div id="jcarousel-1-303" class="jCarouselMainWrapper">
 
-                                    <div id="popup-box" class="modal">
-                                        <div class="content">
-                                            <div class="form-group">
-                                                <embed src="{{asset('uploads/catalogue/Furniture-and-Household-Catalogue.pdf')}}" type="application/pdf" width="100%" height="100%">
-                                            </div>
-                                            <a href="#" class="box-close">
-                                                ×
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div id="popup-box2" class="modal">
-                                        <div class="content">
-                                            <div class="form-group">
-                                                <embed src="{{asset('uploads/catalogue/Toys-Catalogue.pdf')}}" type="application/pdf" width="100%" height="100%">
-                                            </div>
-                                            <a href="#" class="box-close">
-                                                ×
-                                            </a>
-                                        </div>
-                                    </div>
+{{--                                    <div id="popup-box" class="modal">--}}
+{{--                                        <div class="content">--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <embed src="{{asset('uploads/catalogue/Furniture-and-Household-Catalogue.pdf')}}" type="application/pdf" width="100%" height="100%">--}}
+{{--                                            </div>--}}
+{{--                                            <a href="#" class="box-close">--}}
+{{--                                                ×--}}
+{{--                                            </a>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <div id="popup-box2" class="modal">--}}
+{{--                                        <div class="content">--}}
+{{--                                            <a href="#" class="box-close">--}}
+{{--                                                ×--}}
+{{--                                            </a>--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <embed src="{{asset('uploads/catalogue/Toys-Catalogue.pdf')}}" type="application/pdf" width="100%" height="100%">--}}
+{{--                                            </div>--}}
+
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+
+
                                     <div class="nop-jcarousel category-grid home-page-category-grid">
                                         <div class="slick-carousel item-grid">
                                             <div class="kids-edu" style="height: 50%">
@@ -55,8 +61,7 @@
                                                         <h2 class="title" style="padding: 10px 15px">
                                                             <span style="display: block;padding-bottom: 10px"> <b>Kings Group</b></span>
                                                             Furniture and Household
-                                                            <a class="kidsDownload" style="background: white; margin-top: 10px; padding: 10px 10px;"
-                                                               href="#popup-box" title="">View</a>
+                                                            <a class="kidsDownload" style="background: white; margin-top: 10px; padding: 10px 10px;" target="_blank" href="{{ route('product.catalogue.kings') }}" title="">View</a>
                                                         </h2>
                                                     </div>
                                                 </div>
@@ -72,8 +77,7 @@
                                                         <h2 class="title" style="padding: 10px 15px">
                                                             <span style="display: block;padding-bottom: 10px"> <b>Captain Group</b></span>
                                                            Toys
-                                                            <a class="kidsDownload" style="background: white; margin-top: 10px; padding: 10px 10px;"
-                                                               href="#popup-box2" title="">View</a>
+                                                            <a class="kidsDownload" style="background: white; margin-top: 10px; padding: 10px 10px;" target="_blank" href="{{ route('product.catalogue.captain') }}"  title="">View</a>
                                                         </h2>
                                                     </div>
 
