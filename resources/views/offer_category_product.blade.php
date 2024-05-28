@@ -45,9 +45,9 @@
                                 @if(isset($offer) && !empty($offer))
                                     @if(isset($offer->offer_products) && !empty($offer->offer_products))
                                         @foreach($offer->offer_products as $product)
-                                            <?php
-                                            //dd($product);
-                                            ?>
+{{--                                            <?php--}}
+{{--                                            dd($product);--}}
+{{--                                            ?>--}}
                                         <div class="item-box">
                                             <div class="product-item">
                                                 <div class="picture">

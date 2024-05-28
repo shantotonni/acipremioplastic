@@ -1,15 +1,7 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/category/{slug}', 'HomeController@category')->name('category');
@@ -17,11 +9,16 @@ Route::get('/category-product/{slug}', 'HomeController@categoryProduct')->name('
 Route::get('/product-details/{slug}', 'HomeController@productDetails')->name('product.details');
 Route::get('/get/offers', 'HomeController@getOffers')->name('get.offers');
 Route::post('/claim/offers', 'HomeController@claimOffers')->name('offer.claim');
+Route::get('/prise-wise-filter', 'HomeController@priceWiseFilter')->name('price.wise.filter');
 
 //pages controller
 Route::get('/about-us', 'PagesController@aboutUs')->name('about.us');
 Route::get('/contact-us', 'PagesController@contactUs')->name('contact');
 Route::get('/how-to-buy', 'PagesController@howToBuy')->name('how.to.buy');
+Route::get('/product-catalogue', 'PagesController@catalogue')->name('product.catalogue');
+Route::get('/product-catalogue/kings-group', 'PagesController@catalogueKings')->name('product.catalogue.kings');
+Route::get('/product-catalogue/captain-group', 'PagesController@catalogueCaptain')->name('product.catalogue.captain');
+
 Route::get('/terms-and-condition', 'PagesController@termsOfCondition')->name('terms.condition');
 Route::get('/delivery-policy', 'PagesController@deliveryPolicy')->name('delivery.policy');
 Route::get('/return-refund-policy', 'PagesController@refundPolicy')->name('refund.policy');

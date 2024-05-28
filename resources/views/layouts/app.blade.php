@@ -20,12 +20,7 @@
     }(document, 'script', 'facebook-jssdk'));</script>
 
     <!-- Your Chat Plugin code -->
-    <div class="fb-customerchat"
-      attribution=setup_tool
-      page_id="303954723467775"
-theme_color="#ff5ca1"
-logged_in_greeting="Welcome to ACI Premio Plastics! How can I help you, sir?"
-logged_out_greeting="Welcome to ACI Premio Plastics! How can I help you, sir?">
+    <div class="fb-customerchat" attribution=setup_tool page_id="303954723467775" theme_color="#ff5ca1" logged_in_greeting="Welcome to ACI Premio Plastics! How can I help you, sir?" logged_out_greeting="Welcome to ACI Premio Plastics! How can I help you, sir?">
     </div>
 
     {{-- End Messenget Chat Head --}}
@@ -78,4 +73,4 @@ logged_out_greeting="Welcome to ACI Premio Plastics! How can I help you, sir?">
 </body>
 
 <!-- Mirrored from sobjibazaar.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 01 Jun 2020 13:45:37 GMT -->
-</html>
+

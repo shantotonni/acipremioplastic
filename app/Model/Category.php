@@ -17,7 +17,8 @@ class Category extends Model
     }
 
     public function products(){
-        return $this->hasMany('App\Model\Product', 'CategoryId','CategoryId')->orderBy('ProductCode', 'desc')->where('ProductStatus','Y');
+        return $this->hasMany('App\Model\Product', 'CategoryId','CategoryId')
+            ->orderBy('ItemFinalPrice', 'desc')->where('ProductStatus','Y');
     }
 
     public function onlyHomePageProduct(){

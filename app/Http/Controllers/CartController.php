@@ -180,13 +180,30 @@ class CartController extends Controller
 
                 $price = $request->quantity * $request->ItemPrice;
                 Cart::update($request->rowId, $request->quantity);
+                $mrp_total = 0;
+                foreach(Cart::content() as $item){
+                    $mrp_total += $item->options->ItemPrice * $item->qty;
+                }
+
+                $coupon_offer = session()->get('coupon_offer');
+                if (!empty($coupon_offer)){
+                    $offer = session()->get('coupon_offer')['offer'];
+                    $offer_amount = (str_replace(',','',$mrp_total) * $offer) /100;
+                    $subtotal = $mrp_total - $offer_amount;
+                    $total_price = $mrp_total - $offer_amount;
+                }else{
+                    $subtotal = Cart::subtotal();
+                    $total_price = Cart::total();
+                }
 
                 return response()->json([
                     'success'=>'Item Updated Successfully in your cart!',
                     'qty' => Cart::instance('default')->count() ,
                     'price' => $price ,
-                    'subtotal' => Cart::subtotal(),
-                    'total_price' => Cart::total(),
+                    'subtotal' => $subtotal,
+                    'total_price' => $total_price,
+                    'total_mrp' => $mrp_total,
+                    'offer_amount' => isset($offer_amount) ? $offer_amount : 0,
                 ]);
 //            }
 //        }else{
