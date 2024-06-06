@@ -60,19 +60,53 @@ class RegisterController extends Controller
             $otp->GenerateModule = 'otp';
 
             if ($otp->save()){
-                $smstext="Your Otp Code ".$unique_code;
-                $peram = $this->sendSms($request->phone, $smstext);
-                if($peram->isError===false){
-                    return response()->json(['success'=>'OTP send Successfully.Please Check Your Mobile']);
-                }else{
-                    return response()->json(['error'=>'Something went wrong']);
-                }
+                $smscontent="Your Otp Code ".$unique_code;
+                $to = $request->phone;
+                $sId = '8809617615000';
+                $applicationName = 'ACI PremioPlastics';
+                $moduleName = 'Registration';
+                $otherInfo = '';
+                $userId = '2845';
+                $vendor = 'smsq';
+                $message = $smscontent;
+                $this->sendSmsQ($to, $sId, $applicationName, $moduleName, $otherInfo, $userId, $vendor, $message);
+                return response()->json(['success'=>'OTP send Successfully.Please Check Your Mobile']);
+//                if($peram->success === false){
+//                    return response()->json(['success'=>'OTP send Successfully.Please Check Your Mobile']);
+//                }else{
+//                    return response()->json(['error'=>'Something went wrong']);
+//                }
             }
 
             return response()->json(['error'=>'Something went wrong']);
         }
 
         return response()->json(['error'=>$validator->errors()->all()]);
+    }
+
+    public static function sendSmsQ($to, $sId, $applicationName, $moduleName, $otherInfo, $userId, $vendor, $message)
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://192.168.102.10/apps/api/send-sms/sms-master',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => 'To='.$to.'&SID='.$sId.'&ApplicationName='.urlencode($applicationName).'&ModuleName='.urlencode($moduleName).'&OtherInfo='.urlencode($otherInfo).'&userID='.$userId.'&Message='.$message.'&SmsVendor='.$vendor,
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/x-www-form-urlencoded'
+            ),
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false
+        ));
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        return $response;
     }
 
     function sendSms($receipient, $smstext) {

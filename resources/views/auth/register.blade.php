@@ -155,6 +155,7 @@
                     data: {phone : phone},
                     dataType: 'JSON',
                     success: function (data) {
+                        console.log(data)
                         if($.isEmptyObject(data.error)){
                             $("#success-msg-div").html(data.success);
                             $("#success-msg-div").fadeOut(5000);

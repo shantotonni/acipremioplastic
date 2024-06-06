@@ -46,6 +46,11 @@
                                             <input type="text" id="CustomerLastName" name="CustomerLastName" required placeholder="Enter Last Name" />
                                             <span class="required">*</span>
                                         </div>
+                                        <div class="inputs">
+                                            <label for="LastName">Date Of Birth:</label>
+                                            <input type="date" id="DateOfBirth" name="DateOfBirth" style="width: 100%;padding: 10px" required />
+                                            <span class="required">*</span>
+                                        </div>
                                         <?php
                                         use Illuminate\Support\Facades\DB;
                                         $districts = DB::select(DB::raw('SELECT * FROM vDistrict'));

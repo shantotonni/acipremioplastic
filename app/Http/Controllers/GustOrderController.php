@@ -26,6 +26,7 @@ class GustOrderController extends Controller
             'District'=>'required',
             'Thana'=>'required',
             'DeliveryAddress'=>'required',
+            'DateOfBirth'=>'required',
         ]);
 
         $district = explode('-',$request->District);
@@ -36,6 +37,7 @@ class GustOrderController extends Controller
             'AddressTypeID' =>$request->AddressTypeID2,
             'AddressID' =>$request->AddressID,
             'CustomerName' =>$request->CustomerFirstName .' '.$request->CustomerLastName,
+            'DateOfBirth' =>$request->DateOfBirth,
             'CustomerMobileNo' =>$request->CustomerMobileNo,
             'CustomerEmail' =>$request->CustomerEmail,
             'DistrictCode' =>$district[0],
@@ -83,6 +85,7 @@ class GustOrderController extends Controller
         $invoice->CustomerID = '';
         $invoice->CouponID = $CouponID;
         $invoice->CustomerName = $request->CustomerName;
+        $invoice->DateOfBirth = $request->DateOfBirth;
         $invoice->CustomerMobileNo = $request->CustomerMobileNo;
         $invoice->CustomerEmail = '';
         $invoice->AddressID = isset($request->AddressID) ? $request->AddressID : '';
@@ -129,6 +132,7 @@ class GustOrderController extends Controller
 
             $guest_user                 = new GuestUser();
             $guest_user->customer_name  = $request->CustomerName;
+            $guest_user->DateOfBirth    = $request->DateOfBirth;
             $guest_user->mobile         = $request->CustomerMobileNo;
             $guest_user->email          = $request->CustomerEmail;
             $guest_user->DeliveryAddress= $request->DeliveryAddress;
@@ -138,8 +142,16 @@ class GustOrderController extends Controller
             $guest_user->ProjectID      = $project_id;
             $guest_user->save();
 
-            $smstext="Your Order Has been Placed.Your Order Id: ".$invoice->InvoiceNo;
-            $peram = $this->sendSms($request->CustomerMobileNo, $smstext);
+            $smscontent="Your Order Has been Placed.Your Order Id: ".$invoice->InvoiceNo;
+            $to = $request->CustomerMobileNo;
+            $sId = '8809617615000';
+            $applicationName = 'ACI Premio Plastics';
+            $moduleName = 'Guest Order';
+            $otherInfo = '';
+            $userId = $project_id;
+            $vendor = 'smsq';
+            $message = $smscontent;
+            $this->sendSmsQ($to, $sId, $applicationName, $moduleName, $otherInfo, $userId, $vendor, $message);
 
             if(!empty(session()->get('spin_offer')['CouponCode'])){
                 $coupon_log->Used = 1;
@@ -154,6 +166,31 @@ class GustOrderController extends Controller
             Toastr::success('Order Successfully Completed' ,'Success');
             return redirect()->route('invoice.success');
         }
+    }
+
+    public static function sendSmsQ($to, $sId, $applicationName, $moduleName, $otherInfo, $userId, $vendor, $message)
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://192.168.102.10/apps/api/send-sms/sms-master',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => 'To='.$to.'&SID='.$sId.'&ApplicationName='.urlencode($applicationName).'&ModuleName='.urlencode($moduleName).'&OtherInfo='.urlencode($otherInfo).'&userID='.$userId.'&Message='.$message.'&SmsVendor='.$vendor,
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/x-www-form-urlencoded'
+            ),
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false
+        ));
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        return $response;
     }
 
     function sendSms($receipient, $smstext) {
