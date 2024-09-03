@@ -47,6 +47,8 @@
     <script src="{{ asset('assets/Plugins/SevenSpikes.Core/Scripts/iOS-12-array-reverse-fix.min.js') }}"></script>
     <script src="{{ asset('assets/Themes/Emporium/Content/scripts/jquery.jscroll.min.js') }}"></script>
 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXPyPiAG0udShNZtQnRDswNHclnFXDszQ&callback=initMap" async defer></script>
+
     <link rel="icon" href="{{ asset('assets/images/logo/icon.png') }}" type="image/gif" sizes="16x16">
 
     <!-- Google tag (gtag.js) -->

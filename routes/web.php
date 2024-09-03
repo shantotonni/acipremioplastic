@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DealerLocationController;
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/category/{slug}', 'HomeController@category')->name('category');
@@ -126,4 +127,8 @@ Route::get('/product-offer-details/{id?}', 'HomeController@productOfferDetails')
 
 //Kids Educational Apps
 Route::get('/kids-educational-apps', 'PagesController@kidsEducational')->name('kids.educational.app');
+
+// Dealer Location
+Route::get('/dealer-locatior', 'DealerLocationController@index')->name('dealer.location.index');
+Route::post('/get-dealer', 'DealerLocationController@getDealer')->name('get.dealer');
 

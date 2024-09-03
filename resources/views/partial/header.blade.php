@@ -243,6 +243,7 @@
                     <li><a href="{{ route('new.arrivals') }}">New Arrivals</a></li>
                     <li><a href="{{ route('offer.category') }}">Offer</a></li>
                     <li><a href="{{ route('current.offer') }}">Current Offer</a></li>
+                    <li><a href="{{ route('dealer.location.index') }}">Dealer Locator</a></li>
                     <li style="background: #37d426;"><a style="color: white!important;" href="{{ route('kids.educational.app') }}">Kids Educational Apps</a></li>
 {{--                    <li><a href="{{ route('kids.educational.app') }}">Kids Educational Apps</a></li>--}}
                     <li style="background: #CC1B7B;"><a style="color: white!important;" href="tel:09606666678">HOT LINE: 09606666674</a></li>
