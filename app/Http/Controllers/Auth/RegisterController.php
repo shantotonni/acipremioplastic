@@ -231,6 +231,7 @@ class RegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'CustomerFirstName' => ['required', 'string', 'max:255'],
             'CustomerLastName' => ['required', 'string', 'max:255'],
+            'DateOfBirth' => ['required', 'max:255'],
             'CustomerMobileNo' => ['required','numeric','digits:11'],
             'CustomerEmail' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
@@ -239,11 +240,17 @@ class RegisterController extends Controller
         $ip = $_SERVER['REMOTE_ADDR'];
         $project_id = config('app.project_id');
 
+//        $exists_check = User::query()->where('ProjectID',$project_id)->where('CustomerMobileNo',$request->CustomerMobileNo)->exists();
+//        if ($exists_check){
+//            return response()->json(['error'=>'Already Exist Your Mobile number']);
+//        }
+
         if ($validator->passes()) {
             $customer = new User();
             $customer->ProjectID = $project_id;
             $customer->CustomerFirstName = $request->CustomerFirstName;
             $customer->CustomerLastName = $request->CustomerLastName;
+            $customer->DateOfBirth  = $request->DateOfBirth;
             $customer->CustomerMobileNo = $request->CustomerMobileNo;
             $customer->CustomerEmail = $request->CustomerEmail;
             $customer->CreatedDate = Carbon::now()->format('Y-m-d');
