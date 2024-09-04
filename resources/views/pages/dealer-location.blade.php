@@ -53,7 +53,7 @@
         max-width: 100%;
         margin-bottom: 5px;
         font-weight: 700;
-        width: 20%;
+        width: 35%;
         font-size: 15px;
     }
 
@@ -96,7 +96,7 @@
         margin-top: 2rem;
     }
     .select2-container {
-        width: 350px !important;
+        width: 300px !important;
     }
     .dealer-list::-webkit-scrollbar{
       width:5px;
@@ -143,6 +143,15 @@
                                         <option value="">Select Upazila</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label for="ProductGroup">Product Group:</label>
+                                    <select class="form-select select2" id="ProductGroup" name="ProductGroup">
+                                        <option value="">Select Product Group</option>
+                                        <option value="Furniture and Household">Furniture and Household</option>
+                                        <option value="Toys">Toys</option>
+                                        <option value="Both">Both</option>
+                                    </select>
+                                </div>
 
                                 <div class="location-container">
                                     <p id="result-count" style="margin-bottom:1rem">0 results found</p>
@@ -166,92 +175,136 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#DistrictCode').select2({
-            placeholder: "Select a District",
-            allowClear: true
-        });
-        $('#UpazillaCode').select2({
-            placeholder: "Select a Upazila",
-            allowClear: true
-        });
-        initMap()
-});
+  $(document).ready(function() {
+    $('#DistrictCode').select2({
+        placeholder: "Select a District",
+        allowClear: true
+    });
+    $('#UpazillaCode').select2({
+        placeholder: "Select a Upazila",
+        allowClear: true
+    });
+    $('#ProductGroup').select2({
+        placeholder: "Select a Product Group",
+        allowClear: true
+    });
+    getDealerLocation();
 
-$("#DistrictCode").change(function(){
-    var district = $("#DistrictCode").val();
-    $.ajax({
-        type: "POST",
-        url: "{{ url('district/wise/thana') }}",
-        data: { district : district }
-    }).done(function(data){
-        $("#UpazillaCode").html(data);
+    initMap();
+
+    $("#DistrictCode").change(function() {
+        var district = $("#DistrictCode").val();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('district/wise/thana') }}",
+            data: { district: district }
+        }).done(function(data) {
+            $("#UpazillaCode").html(data);
+            getDealerLocation();
+        });
+    });
+
+    $("#UpazillaCode").change(function() {
         getDealerLocation();
     });
-});
 
-$("#UpazillaCode").change(function(){
-    getDealerLocation();
-});
+    $("#ProductGroup").change(function() {
+        getDealerLocation();
+    });
 
-function getDealerLocation(){
-    var district = $("#DistrictCode").val();
-    var upazila = $("#UpazillaCode").val();
-    $.ajax({
-        type: "POST",
-        url: "{{ url('get-dealer') }}",
-        data: {
-            district : district,
-            upazila : upazila,
-        }
-    }).done(function(data){
-        let dealers = data.dealers;
+    function getDealerLocation() {
+        var district = $("#DistrictCode").val();
+        var upazila = $("#UpazillaCode").val();
+        var productGroup = $("#ProductGroup").val();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('get-dealer') }}",
+            data: {
+                district: district,
+                upazila: upazila,
+                productGroup: productGroup,
+            }
+        }).done(function(data) {
+            let dealers = data.dealers;
 
-        // Update the dealer list
-        let dealerListHtml = '';
-        dealers.forEach((dealer, index) => {
-            let borderClass = index === 0 ? 'list-border-first' : 'list-border-next';
-            dealerListHtml += `
-                <div class="${borderClass}">
-                    <div class="dealer-info">
-                        <h2>${dealer.Name}</h2>
-                        <p>${dealer.Address}</p>
-                        <p>${dealer.Phone}</p>
+            // Update the dealer list
+            let dealerListHtml = '';
+            dealers.forEach((dealer, index) => {
+                let borderClass = index === 0 ? 'list-border-first' : 'list-border-next';
+                dealerListHtml += `
+                    <div class="${borderClass}">
+                        <div class="dealer-info">
+                            <h2>${dealer.Name}</h2>
+                            <p>${dealer.Address}</p>
+                            <p>${dealer.Phone}</p>
+                        </div>
                     </div>
-                </div>
-            `;
-        });
-        $('#dealer-list').html(dealerListHtml);
-        $('#result-count').text(`${dealers.length} results found`);
-
-        // Initialize the map
-        initMap(dealers);
-    });
-}
-
-function initMap(dealers) {
-    const defaultLatLng = { lat: 23.685, lng: 90.3563 }; // Center of Bangladesh
-
-    const map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 7,
-        center: defaultLatLng
-    });
-
-    if (dealers.length > 0) {
-        // Zoom and center the map based on dealer data if available
-        const bounds = new google.maps.LatLngBounds();
-        dealers.forEach(dealer => {
-            const latLng = new google.maps.LatLng(parseFloat(dealer.Latitude), parseFloat(dealer.Longitude));
-            bounds.extend(latLng);
-            const marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: dealer.Name
+                `;
             });
+            $('#dealer-list').html(dealerListHtml);
+            $('#result-count').text(`${dealers.length} results found`);
+
+            // Initialize the map with the dealers data
+            initMap(dealers);
         });
-        map.fitBounds(bounds);
     }
-}
+
+    function initMap(dealers) {
+        const defaultLatLng = { lat: 23.685, lng: 90.3563 }; // Center of Bangladesh
+
+        const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 5,
+            center: defaultLatLng
+        });
+
+        const infoWindow = new google.maps.InfoWindow();
+
+        if (dealers.length > 0) {
+            const bounds = new google.maps.LatLngBounds();
+
+            dealers.forEach(dealer => {
+                const latLng = new google.maps.LatLng(parseFloat(dealer.Latitude), parseFloat(dealer.Longitude));
+                bounds.extend(latLng);
+
+                const marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    title: dealer.Name
+                });
+
+                // Update the content string to include phone number
+                const contentString = `
+                    <div>
+                        <strong>${dealer.Name}</strong><br>
+                        ${dealer.Address}<br>
+                        <strong>Phone:</strong> ${dealer.Phone}
+                    </div>
+                `;
+
+                // Add click event listener to the marker
+                marker.addListener('click', () => {
+                    infoWindow.setContent(contentString);
+                    infoWindow.open(map, marker);
+                });
+
+                // Optional: Add hover effect
+                marker.addListener('mouseover', () => {
+                    infoWindow.setContent(contentString);
+                    infoWindow.open(map, marker);
+                });
+            });
+
+            map.fitBounds(bounds);
+
+            google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
+                const currentZoom = map.getZoom();
+                if (currentZoom > 15) {
+                    map.setZoom(15);
+                }
+            });
+        }
+    }
+});
 
 </script>
 @endpush

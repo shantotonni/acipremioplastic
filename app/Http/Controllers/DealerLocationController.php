@@ -18,6 +18,7 @@ class DealerLocationController extends Controller
     public function getDealer(Request $request)
     {
         $district = $request->district;
+        $productGroup = $request->productGroup;
         $upazila = null;
 
         if (!empty($request->upazila)) {
@@ -25,13 +26,21 @@ class DealerLocationController extends Controller
             $upazila = $parts[0]; // This will give you "1233"
         }
 
-        $query = Dealer::where('DistrictCode', $district);
+        $query = Dealer::query();
+
+        if($district){
+            $query->where('DistrictCode', $district);
+        }
 
         if ($upazila) {
             $query->where('UpazillaCode', $upazila);
         }
 
-        $dealers = $query->get();
+        if ($productGroup) {
+            $query->where('ProductGroup', $productGroup);
+        }
+
+        $dealers = $query->orderBy('DealerId', 'DESC')->get();
         $location = [];
 
         foreach ($dealers as $dealer) {
