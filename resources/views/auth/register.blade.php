@@ -86,6 +86,11 @@
                                         <span class="required">*</span>
                                     </div>
                                     <div class="inputs">
+                                        <label for="LastName">Date Of Birth:</label>
+                                        <input type="date" id="DateOfBirth" name="DateOfBirth" style="width: 100%;padding: 10px" required />
+                                        <span class="required">*</span>
+                                    </div>
+                                    <div class="inputs">
                                         <label for="Username">Mobile:</label>
                                         <input readonly="" type="text" id="phone" name="CustomerMobileNo" />
                                         <span class="required">*</span>
