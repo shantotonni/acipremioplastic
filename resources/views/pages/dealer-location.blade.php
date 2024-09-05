@@ -149,7 +149,6 @@
                                         <option value="">Select Product Group</option>
                                         <option value="Furniture and Household">Furniture and Household</option>
                                         <option value="Toys">Toys</option>
-                                        <option value="Both">Both</option>
                                     </select>
                                 </div>
 

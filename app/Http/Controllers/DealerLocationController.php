@@ -37,7 +37,7 @@ class DealerLocationController extends Controller
         }
 
         if ($productGroup) {
-            $query->where('ProductGroup', $productGroup);
+            $query->where('ProductGroup', $productGroup)->orWhere('ProductGroup', 'Both');
         }
 
         $dealers = $query->orderBy('DealerId', 'DESC')->get();
