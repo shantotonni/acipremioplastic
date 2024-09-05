@@ -190,7 +190,7 @@
     });
     getDealerLocation();
 
-    initMap();
+    //initMap();
 
     $("#DistrictCode").change(function() {
         var district = $("#DistrictCode").val();
