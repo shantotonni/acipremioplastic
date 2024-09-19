@@ -94,9 +94,7 @@
                                                 @endforeach
                                             @endif
                                         @endif
-
                                     </ul>
-
                                 </div>
                                 <br>
                                 @if(isset($category) && !empty($category))
