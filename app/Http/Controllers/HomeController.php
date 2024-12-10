@@ -28,7 +28,6 @@ class HomeController extends Controller
         $category = Category::where('CategorySlug',$slug)->where('CategoryStatus','Y')->where('ProjectID',$project_id)->with('subcategory','products')->first();
 
         if (isset($category) && !empty($category)){
-
             if (count($category->subcategory) > 0){
                 return view('sub_category',compact('category'));
             }else{
@@ -36,9 +35,7 @@ class HomeController extends Controller
             }
         }else{
             $sub_category = SubCategory::where('SubcategorySlug',$slug)->where('ProjectID',$project_id)->where('SubCategoryStatus','Y')->with('products')->first();
-
             $sub_categories = SubCategory::query()->where('ProjectID',$project_id)->where('SubCategoryStatus','Y')->get();
-
             return view('category_product',compact('sub_category','sub_categories'));
         }
     }

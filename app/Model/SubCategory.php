@@ -12,7 +12,7 @@ class SubCategory extends Model
 
     public function products(){
 
-        return $this->hasMany('App\Model\Product', 'SubCategoryId','SubCategoryId')->where('ProductStatus','Y');
+        return $this->hasMany('App\Model\Product', 'SubCategoryId','SubCategoryId')->where('ProductStatus','Y')->orderBy('ItemPrice','desc');
 
     }
 

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Customer;
 use App\Model\CouponLog;
 use App\Model\OtpGenaration;
 use App\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
+use Dompdf\Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -70,6 +72,7 @@ class RegisterController extends Controller
                 $vendor = 'smsq';
                 $message = $smscontent;
                 $this->sendSmsQ($to, $sId, $applicationName, $moduleName, $otherInfo, $userId, $vendor, $message);
+
                 return response()->json(['success'=>'OTP send Successfully.Please Check Your Mobile']);
 //                if($peram->success === false){
 //                    return response()->json(['success'=>'OTP send Successfully.Please Check Your Mobile']);
@@ -127,9 +130,7 @@ class RegisterController extends Controller
         ]);
 
         if ($validator->passes()) {
-
             $exists = User::where('CustomerMobileNo',$request->phone)->where('ProjectID',config('app.project_id'))->exists();
-
             if ($exists){
                 $otp =new OtpGenaration();
                 $otp->MobileNo = $request->phone;
@@ -141,14 +142,11 @@ class RegisterController extends Controller
                 if ($otp->save()){
                     return response()->json(['success'=>'OTP send Successfully.']);
                 }
-
                 return response()->json(['error'=>'Something went wrong']);
             }else{
                 return response()->json(['error'=>'Mobile number Not Found']);
             }
-
         }
-
         return response()->json(['error'=>$validator->errors()->all()]);
     }
 
@@ -159,9 +157,7 @@ class RegisterController extends Controller
         ]);
 
         if ($validator->passes()) {
-
             $exists = User::where('CustomerMobileNo',$request->phone_number)->where('ProjectID',config('app.project_id'))->exists();
-
             if ($exists){
                 $customer = User::where('CustomerMobileNo',$request->phone_number)->first();
                 $customer->password = bcrypt($request->password);
@@ -170,11 +166,8 @@ class RegisterController extends Controller
             }else{
                 return response()->json(['error'=>'Mobile number Not Found']);
             }
-
         }
-
         return response()->json(['error'=>$validator->errors()->all()]);
-
     }
 
     public function otpVerify(Request $request){
@@ -263,7 +256,7 @@ class RegisterController extends Controller
                 ///customer/profile
                 if(Auth::attempt(['CustomerMobileNo' => $request->CustomerMobileNo, 'password' => $request->password,'ProjectID' =>config('app.project_id')])) {
                     return response()->json(['success'=>'Registration Successfully Generated']);
-                }  else {
+                }else {
                     $this->incrementLoginAttempts($request);
                     return response()->json(['error'=>'Customer Not Active']);
                 }
@@ -273,7 +266,6 @@ class RegisterController extends Controller
             }
             return response()->json(['error'=>'Something went wrong']);
         }
-
         return response()->json(['error'=>$validator->errors()->all()]);
     }
 
@@ -307,7 +299,6 @@ class RegisterController extends Controller
             if ($customer->save()){
                 ///customer/profile
                 if(Auth::attempt(['CustomerMobileNo' => $request->CustomerMobileNo, 'password' => $request->password,'ProjectID' =>config('app.project_id')])) {
-
                     $created_at = Carbon::now();
                     $coupon_log = new CouponLog();
                     $coupon_log->ProjectID = $project_id;
@@ -323,8 +314,7 @@ class RegisterController extends Controller
                     $coupon_log->save();
 
                     return response()->json(['success'=>'Registration Successfully Generated','CouponID' =>$coupon_log->CouponID]);
-
-                }  else {
+                }else {
                     $this->incrementLoginAttempts($request);
                     return response()->json(['error'=>'Customer Not Active']);
                 }
@@ -334,7 +324,6 @@ class RegisterController extends Controller
             }
             return response()->json(['error'=>'Something went wrong']);
         }
-
         return response()->json(['error'=>$validator->errors()->all()]);
     }
 
