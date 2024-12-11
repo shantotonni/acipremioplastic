@@ -61,7 +61,23 @@
         gtag('config', 'UA-252052638-1');
     </script>
 
-    <!-- Meta Pixel Code -->
+{{--    <!-- Meta Pixel Code -->--}}
+{{--    <script>--}}
+{{--        !function(f,b,e,v,n,t,s)--}}
+{{--        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?--}}
+{{--            n.callMethod.apply(n,arguments):n.queue.push(arguments)};--}}
+{{--            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';--}}
+{{--            n.queue=[];t=b.createElement(e);t.async=!0;--}}
+{{--            t.src=v;s=b.getElementsByTagName(e)[0];--}}
+{{--            s.parentNode.insertBefore(t,s)}(window, document,'script',--}}
+{{--            'https://connect.facebook.net/en_US/fbevents.js');--}}
+{{--        fbq('init', '521157879960580');--}}
+{{--        fbq('track', 'PageView');--}}
+{{--    </script>--}}
+{{--    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=521157879960580&ev=PageView&noscript=1"/></noscript>--}}
+{{--    <!-- End Meta Pixel Code -->--}}
+
+<!-- Meta Pixel Code -->
     <script>
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -71,17 +87,18 @@
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '521157879960580');
+        fbq('init', '457522586792978');
         fbq('track', 'PageView');
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-                   src="https://www.facebook.com/tr?id=521157879960580&ev=PageView&noscript=1"
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=457522586792978&ev=PageView&noscript=1"
         /></noscript>
     <!-- End Meta Pixel Code -->
 
     <!-- Eskimi DSP Pixel Code -->
     <script>
-        !function(f,e,t,u,n,s,p) {if(f.esk)return;n=f.esk=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f.___esk)f.___esk=n;n.push=n;n.loaded=!0;n.queue=[];s=e.createElement(t);s.async=!0;s.src=u;p=e.getElementsByTagName(t)[0];p.parentNode.insertBefore(s,p)}(window,document,'script', 'https://dsp-media.eskimi.com/assets/js/e/gtr.min.js?_=0.0.0.5');
+        !function(f,e,t,u,n,s,p) {if(f.esk)return;n=f.esk=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f.___esk)f.___esk=n;n.push=n;n.loaded=!0;n.queue=[];s=e.createElement(t);s.async=!0;s.src=u;p=e.getElementsByTagName(t)[0];
+            p.parentNode.insertBefore(s,p)}(window,document,'script', 'https://dsp-media.eskimi.com/assets/js/e/gtr.min.js?_=0.0.0.5');
         esk('init', '30611');
     </script>
     <!-- End Eskimi DSP Pixel Code -->
