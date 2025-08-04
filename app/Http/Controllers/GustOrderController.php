@@ -8,13 +8,10 @@ use App\Model\Invoice;
 use App\Model\InvoiceDetail;
 use App\Model\Product;
 use App\Model\Stock;
-use App\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class GustOrderController extends Controller
 {

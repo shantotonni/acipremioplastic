@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Customer;
 use App\Model\CouponLog;
 use App\Model\OtpGenaration;
 use App\User;
-use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
-use Dompdf\Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -191,34 +187,6 @@ class RegisterController extends Controller
         return response()->json(['error'=>$validator->errors()->all()]);
     }
 
-//    protected function validator(array $data)
-//    {
-//         $validator = Validator::make($data, [
-//            'FirstName' => ['required', 'string', 'max:255'],
-//            'LastName' => ['required', 'string', 'max:255'],
-//            'phone' => 'required|numeric|digits:11',
-//            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-//            'password' => ['required', 'string', 'min:8', 'confirmed'],
-//        ]);
-//
-//        if ($validator->passes()) {
-//            dd('ok');
-//            return $validator;
-//        }
-//        return $validator;
-//        //return response()->json(['error'=>$validator->errors()->all()]);
-//    }
-//
-//    protected function create(array $data)
-//    {
-//        return User::create([
-//            'name' => $data['name'],
-//            'email' => $data['email'],
-//            'password' => Hash::make($data['password']),
-//        ]);
-//    }
-
-
     public function register(Request $request)  {
 
         $validator = Validator::make($request->all(), [
@@ -268,7 +236,6 @@ class RegisterController extends Controller
         }
         return response()->json(['error'=>$validator->errors()->all()]);
     }
-
 
     public function registrationWithOffer(Request $request)  {
 

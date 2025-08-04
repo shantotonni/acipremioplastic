@@ -27,11 +27,6 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
     protected $redirectTo = '/customer/profile';
 
     protected function validateLogin(Request $request)
